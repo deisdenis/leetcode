@@ -12,6 +12,7 @@
 
 
 class Solution:
+
     # this approach can solve it within 1 pass leading to:
     #   time: O(n)
     #   space: O(n)
@@ -22,6 +23,7 @@ class Solution:
                 d[nums[p]] = p
             else:
                 return [d[target-nums[p]], p]
+
     # this approach is inefficient in terms of time, but perfect in terms of space
     #   time: O(n**2)
     #   space: O(1)
