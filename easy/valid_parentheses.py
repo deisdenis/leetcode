@@ -30,26 +30,28 @@
 
 class Solution:
     def isValid(self, s: str) -> bool:
-        #dict = {'(': 0, ')': 0, '[': 0, ']': 0, '{': 0, '}': 0}
-        dict = {'()': 0, '[]': 0, '{}': 0}
+        # The solution uses single pass based on dictionary and stack of open parentheses to keep reverse closing order:
+        #   time: O(n)
+        #   space: O(n)
+        brackets = {')': '(', ']': '[', '}': '{'}
+        debt = []
         for char in s:
-            dict[char] += 1
-            if ((dict['}'] > dict['{']) or (dict[']'] > dict['[']) or (dict[')'] > dict['('])) \
-                    or ((dict['}'] < dict['{']) and ((dict[']'] != dict['[']) or (dict[')'] != dict['(']))) \
-                    or ((dict[']'] < dict['[']) and ((dict[')'] != dict['(']) or (dict['}'] != dict['{']))) \
-                    or (((dict['}'] != dict['{']) or (dict[']'] != dict['['])) and (dict[')'] < dict['('])):
-                return False
-
+            if char in brackets:
+                if len(debt) == 0 or debt.pop() != brackets[char]:
+                    return False
+            else:
+                debt.append(char)
+        if len(debt) > 0:
+            return False
         return True
 
 
-test_list = ["()", "()[]{}", "(]", "([)]", "{[]}"]
-
+test_list = ["()", "()[]{}", "(]", "([)]", "{[]}", "]", "[", "[([]])", "(])"]
 answers = []
 
 solution = Solution()
 for test_value in test_list:
     answers.append(solution.isValid(test_value))
-assert answers == [True, True, False, False, True], str(answers) + ' is wrong solution'
+assert answers == [True, True, False, False, True, False, False, False, False], str(answers) + ' is wrong solution'
 print('Everything looks fine!')
 
