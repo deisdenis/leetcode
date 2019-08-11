@@ -16,26 +16,27 @@ import numpy as np
 
 class Solution:
     def maxArea(self, height: list) -> int:
-        height = np.array(height)
-        n = len(height)
-        # get distances
-        d = np.matmul(np.arange(n).reshape(n, 1), np.ones((1, n)))
-        dist = abs(d - d.T)
-        # get heights
-        h1m = np.matmul(height.reshape(n, 1), np.ones((1, n)))
-        h2m = np.matmul(np.ones((n, 1)), height.reshape(n, 1).T)
-        h1g = np.less_equal(h1m, h2m)
-        h2g = np.less(h2m, h1m)
-        ans = h1g * h1m + h2g * h2m
-        areas = ans * dist
-        return areas.max()
+        # The idea is to use sliding borders, as only the lower boundary is responsible for the height.
+        # time: O(n)
+        # space: O(1)
+        left = 0
+        right = len(height) - 1
+        max_area = min(height[left], height[right]) * right
+        while left < right:
+            if height[left] < height[right]:
+                left += 1
+            else:
+                right -= 1
+            if min(height[left], height[right])*(right - left) > max_area:
+                max_area = min(height[left], height[right])*(right - left)
+        return max_area
 
 
-test_list = [[1, 8, 6, 2, 5, 4, 8, 3, 7], [3, 5]]
+test_list = [[1, 8, 6, 2, 5, 4, 8, 3, 7], [3, 5], np.arange(15000, 0, -1)]
 answers = []
 
 solution = Solution()
 for test_value in test_list:
     answers.append(solution.maxArea(test_value))
-assert answers == [49, 3], str(answers) + ' is wrong solution'
+assert answers == [49, 3, 56250000], str(answers) + ' is wrong solution'
 print('Everything looks fine!')
