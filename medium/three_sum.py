@@ -54,14 +54,11 @@ a = [82597,-9243,62390,83030,-97960,-26521,-61011,83390,-38677,12333,75987,46091
 
 test_list = [[-1, 0, 1, 2, -1, -4], a]
 answers = []
-import time
-t0 = time.time()
 
 solution = Solution()
 for test_value in test_list:
     answers.append(solution.threeSum(test_value))
 
-print('spent: ', time.time()-t0)
 assert answers == [[[-1, 0, 1], [-1, -1, 2]]], str(answers) + ' is wrong solution'
 print('Everything looks fine!')
 
